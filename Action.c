@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:31 2015 denel-_l
-** Last update Wed Feb 25 10:16:06 2015 denel-_l
+** Last update Wed Feb 25 10:53:12 2015 denel-_l
 */
 
 #include "Action.h"
@@ -103,26 +103,21 @@ void		*doSomeThing(void *arg)
   case THINK: doEat(tmp);
     break;
   }
+  return (NULL);
 }
 
 int		main(void)
 {
   t_philo	*philo;
-  t_philo	*tmp;
   int		i;
   i = 0;
   philo = init();
-  while (i < 6)
+  printf("philo n°%d join the table\n", philo->id);
+  while (i < 6 && reserve > 0)
     {
       pushafter(philo);
+      printf("philo n°%d join the table\n", philo->prev->id);
       i++;
-    }
-  tmp = philo->next;
-  printf("philo n°%d join the table\n", philo->id);
-  while (tmp != philo)
-    {
-      printf("philo n°%d join the table\n", tmp->id);
-      tmp = tmp->next;
     }
   return 0;
 }

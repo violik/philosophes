@@ -5,16 +5,16 @@
 ## Login   <denel-_l@epitech.net>
 ##
 ## Started on  Wed Jan  7 11:36:20 2015 denel lowik
-## Last update Tue Feb 24 23:31:28 2015 denel-_l
+## Last update Wed Feb 25 10:48:11 2015 denel-_l
 ##
 
-CC = gcc
+CC = gcc -lpthread
 
 RM = rm -f
 
-# CFLAGS += -Wextra -Wall -Werror
-# CFLAGS += -ansi -pedantic
-# CFLAGS += -I.
+CFLAGS += -Wextra -Wall -Werror
+CFLAGS += -ansi -pedantic
+CFLAGS += -I.
 
 NAME =	philo
 

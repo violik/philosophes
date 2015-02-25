@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 22:50:45 2015 denel-_l
-** Last update Wed Feb 25 10:10:44 2015 denel-_l
+** Last update Wed Feb 25 10:47:55 2015 denel-_l
 */
 
 #include "Action.h"
@@ -22,6 +22,10 @@ t_philo		*init(void)
       philo->act = NOTHING;
       philo->priority = false;
       philo->hand_use = false;
+      if (pthread_create(&philo->my_thread, NULL, doSomeThing, (void*) philo) != 0)
+	return (NULL);
+      if (pthread_mutex_init(&philo->my_mutex, NULL) != 0)
+	return (NULL);
       philo->prev = philo;
       philo->next = philo;
     }
@@ -44,6 +48,10 @@ void		pushafter(t_philo *element)
       new_element->act = NOTHING;
       new_element->priority = false;
       new_element->hand_use = false;
+      if (pthread_create(&new_element->my_thread, NULL, doSomeThing, (void*)new_element) != 0)
+	return;
+      if (pthread_mutex_init(&new_element->my_mutex, NULL) != 0)
+	return;
       new_element->prev = element->prev;
       new_element->next = element;
       element->prev->next = new_element;

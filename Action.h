@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:37 2015 denel-_l
-** Last update Wed Feb 25 10:10:54 2015 denel-_l
+** Last update Wed Feb 25 10:40:24 2015 denel-_l
 */
 
 #ifndef ACTION_H_
@@ -14,8 +14,8 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include<string.h>
-#include<pthread.h>
+#include <string.h>
+#include <pthread.h>
 
 # define T_EAT 1
 # define T_SLEEP 3
@@ -51,6 +51,7 @@ typedef struct		s_philo
   bool			priority;
   bool			left_av;
   pthread_t		my_thread;
+  pthread_mutex_t	my_mutex;
   Hand			hand_use;
   struct s_philo	*next;
   struct s_philo	*prev;
