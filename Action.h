@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:37 2015 denel-_l
-** Last update Wed Feb 25 10:40:24 2015 denel-_l
+** Last update Wed Feb 25 11:22:40 2015 denel-_l
 */
 
 #ifndef ACTION_H_
@@ -59,7 +59,7 @@ typedef struct		s_philo
 
 
 t_philo		*init(void);
-void		pushafter(t_philo *element);
+void		pushafter(t_philo *element, int i);
 void		emptyliste(t_philo *list);
 void		delliste(t_philo **list);
 int		doSleep(t_philo *arg);

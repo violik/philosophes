@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:31 2015 denel-_l
-** Last update Wed Feb 25 10:53:12 2015 denel-_l
+** Last update Wed Feb 25 11:46:00 2015 denel-_l
 */
 
 #include "Action.h"
@@ -14,7 +14,7 @@ static int		reserve = 20;
 
 int		doSleep(t_philo *arg)
 {
-  if (arg->act != SLEEP) {
+  if (arg->act != SLEEP && arg->act != THINK) {
     arg->act = SLEEP;
     printf("The philosopher n°%d is sleeping\n", arg->id);
     sleep(T_SLEEP);
@@ -29,6 +29,7 @@ int		doSleep(t_philo *arg)
 int		doEat(t_philo *arg)
 {
   if (arg->left_av == true && arg->next->left_av == true) {
+    pthread_mutex_lock(&arg->my_mutex);
     arg->act = EAT;
     arg->left_av = false;
     arg->next->left_av = false;
@@ -40,16 +41,19 @@ int		doEat(t_philo *arg)
     arg->left_av = true;
     arg->next->left_av = true;
     arg->priority = false;
+    pthread_mutex_unlock(&arg->my_mutex);
     return (1);
   }
   doThink(arg);
+  sleep (2);
   printf("The philosopher n°%d is waiting for chopsticks, he gonna try to find one\n", arg->id);
   return (0);
 }
 
 int		doThink(t_philo *arg)
 {
-  if (arg->left_av == true || arg->next->left_av == true) {
+  if ((arg->left_av == true || arg->next->left_av == true) && arg->act != THINK) {
+    pthread_mutex_lock(&arg->my_mutex);
     arg->act = THINK;
     if (arg->left_av == true) {
       arg->left_av = false;
@@ -67,6 +71,7 @@ int		doThink(t_philo *arg)
     else {
       arg->left_av = true;
       arg->hand_use = WAIT; }
+    pthread_mutex_unlock(&arg->my_mutex);
     return (1);
   }
   doSleep(arg);
@@ -79,17 +84,21 @@ void		getPriority(t_philo *arg)
   if (arg->left_av != true && arg->prev->act == THINK) {
     arg->prev->act = EAT;
     arg->left_av = true;
+    pthread_mutex_unlock(&arg->prev->my_mutex);
   }
   if (arg->next->left_av != true && arg->next->act == THINK) {
     arg->next->act = EAT;
     arg->next->left_av = true;
+    pthread_mutex_lock(&arg->next->my_mutex);
   }
 }
 
 void		*doSomeThing(void *arg)
 {
+  while (reserve > 0) {
   t_philo	*tmp;
-  tmp = (t_philo*)&arg;
+  tmp = (t_philo*)arg;
+  /* pthread_mutex_lock(&tmp->my_mutex); */
   if (tmp->priority == true) {
     getPriority(tmp);
   }
@@ -103,21 +112,39 @@ void		*doSomeThing(void *arg)
   case THINK: doEat(tmp);
     break;
   }
+  /* pthread_mutex_unlock(&tmp->my_mutex); */
+  }
   return (NULL);
 }
 
 int		main(void)
 {
   t_philo	*philo;
+   t_philo	*tmp;
   int		i;
-  i = 0;
+  i = 1;
   philo = init();
-  printf("philo n°%d join the table\n", philo->id);
-  while (i < 6 && reserve > 0)
-    {
-      pushafter(philo);
-      printf("philo n°%d join the table\n", philo->prev->id);
-      i++;
-    }
-  return 0;
+  while (i < 7) {
+    pushafter(philo, i + 1);
+    i++;
+  }
+  tmp = philo->next;
+  if (pthread_create(&philo->my_thread, NULL, doSomeThing, (void*)philo) != 0)
+    return (0);
+  if (pthread_mutex_init(&philo->my_mutex, NULL) != 0)
+    return (0);
+  while (tmp != philo && reserve > 0) {
+    if (pthread_create(&tmp->my_thread, NULL, doSomeThing, (void*)tmp) != 0)
+      return (0);
+    if (pthread_mutex_init(&tmp->my_mutex, NULL) != 0)
+      return (0);
+    tmp = tmp->next;
+  }
+  tmp = philo->next;
+  pthread_join(philo->my_thread, NULL);
+  while (tmp != philo) {
+    pthread_join(tmp->my_thread, NULL);
+    tmp = tmp->next;
+  }
+  return (0);
 }
