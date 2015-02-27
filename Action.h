@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:37 2015 denel-_l
-** Last update Wed Feb 25 11:22:40 2015 denel-_l
+** Last update Fri Feb 27 15:08:49 2015 denel-_l
 */
 
 #ifndef ACTION_H_
@@ -20,6 +20,8 @@
 # define T_EAT 1
 # define T_SLEEP 3
 # define T_THINK 2
+
+static int		reserve = 20;
 
 typedef enum		e_Action
   {

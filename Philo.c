@@ -5,11 +5,47 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 22:50:45 2015 denel-_l
-** Last update Wed Feb 25 11:33:04 2015 denel-_l
+** Last update Fri Feb 27 15:09:56 2015 denel-_l
 */
 
 #include "Action.h"
 #include <stdlib.h>
+
+int		main(void)
+{
+  t_philo	*philo;
+  t_philo	*tmp;
+  int		i;
+
+  i = 1;
+  philo = init();
+  while (i < 7)
+    {
+      pushafter(philo, i + 1);
+      i++;
+    }
+  tmp = philo->next;
+  if (pthread_create(&philo->my_thread, NULL, doSomeThing, (void*)philo) != 0)
+    return (0);
+  if (pthread_mutex_init(&philo->my_mutex, NULL) != 0)
+    return (0);
+  while (tmp != philo && reserve > 0)
+    {
+      if (pthread_create(&tmp->my_thread, NULL, doSomeThing, (void*)tmp) != 0)
+	return (0);
+      if (pthread_mutex_init(&tmp->my_mutex, NULL) != 0)
+	return (0);
+      tmp = tmp->next;
+    }
+  tmp = philo->next;
+  pthread_join(philo->my_thread, NULL);
+  while (tmp != philo)
+    {
+      pthread_join(tmp->my_thread, NULL);
+      tmp = tmp->next;
+    }
+  return (0);
+}
 
 t_philo		*init(void)
 {
@@ -25,10 +61,6 @@ t_philo		*init(void)
       philo->prev = philo;
       philo->next = philo;
       printf("philo n°%d join the table\n", philo->id);
-      /* if (pthread_create(&philo->my_thread, NULL, doSomeThing, &philo) != 0) */
-      /* 	return (NULL); */
-      /* if (pthread_mutex_init(&philo->my_mutex, NULL) != 0) */
-      /* 	return (NULL); */
     }
   else
     {
@@ -54,10 +86,6 @@ void		pushafter(t_philo *element, int i)
       element->prev->next = new_element;
       element->prev = new_element;
       printf("philo n°%d join the table\n", new_element->id);
-      /* if (pthread_create(&new_element->my_thread, NULL, doSomeThing, &new_element) != 0) */
-      /* 	return; */
-      /* if (pthread_mutex_init(&new_element->my_mutex, NULL) != 0) */
-      /* 	return; */
     }
   else
     {
