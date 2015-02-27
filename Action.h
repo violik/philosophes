@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:37 2015 denel-_l
-** Last update Fri Feb 27 15:08:49 2015 denel-_l
+** Last update Fri Feb 27 15:44:33 2015 denel-_l
 */
 
 #ifndef ACTION_H_
@@ -64,9 +64,9 @@ t_philo		*init(void);
 void		pushafter(t_philo *element, int i);
 void		emptyliste(t_philo *list);
 void		delliste(t_philo **list);
-int		doSleep(t_philo *arg);
-int		doThink(t_philo *arg);
-int		doEat(t_philo *arg);
+void		doSleep(t_philo *arg);
+void		doThink(t_philo *arg);
+void		doEat(t_philo *arg);
 void		*doSomeThing(void *arg);
 void		getPriority(t_philo *arg);
 

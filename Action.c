@@ -5,12 +5,12 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:31 2015 denel-_l
-** Last update Fri Feb 27 15:08:38 2015 denel-_l
+** Last update Fri Feb 27 15:46:16 2015 denel-_l
 */
 
 #include "Action.h"
 
-int		doSleep(t_philo *arg)
+void		doSleep(t_philo *arg)
 {
   if (arg->act != SLEEP && arg->act != THINK)
     {
@@ -19,14 +19,13 @@ int		doSleep(t_philo *arg)
       sleep(T_SLEEP);
       arg->priority = true;
       printf("The philosophe n°%d wakes up with priority\n", arg->id);
-      return (1);
     }
-  return (0);
 }
 
 
-int		doEat(t_philo *arg)
+void		doEat(t_philo *arg)
 {
+  arg->priority = false;
   if (arg->left_av == true && arg->next->left_av == true)
     {
       pthread_mutex_lock(&arg->my_mutex);
@@ -42,48 +41,39 @@ int		doEat(t_philo *arg)
       arg->next->left_av = true;
       arg->priority = false;
       pthread_mutex_unlock(&arg->my_mutex);
-      return (1);
+      return;
     }
   doThink(arg);
   sleep (2);
-  return (0);
 }
 
-int		doThink(t_philo *arg)
+void		doThink(t_philo *arg)
 {
   if ((arg->left_av == true || arg->next->left_av == true) && arg->act != THINK)
     {
       pthread_mutex_lock(&arg->my_mutex);
       arg->act = THINK;
+      printf("The philosopher n°%d is thinking\n", arg->id);
       if (arg->left_av == true)
 	{
 	  arg->left_av = false;
 	  arg->hand_use = LEFT;
+	  sleep(T_THINK);
+	  arg->next->left_av = true;
 	}
       else
 	{
 	  arg->next->left_av = false;
 	  arg->hand_use = RIGHT;
-	}
-      printf("The philosopher n°%d is thinking\n", arg->id);
-      sleep(T_THINK);
-      printf("The philosophe n°%d is hungry\n", arg->id);
-      arg->priority = false;
-      if (arg->hand_use == RIGHT)
-	{
-	  arg->next->left_av = true;
-	  arg->hand_use = WAIT;
-	}
-      else
-	{
+	  sleep(T_THINK);
 	  arg->left_av = true;
-	  arg->hand_use = WAIT;
 	}
+      arg->hand_use = WAIT;
+      printf("The philosophe n°%d is hungry\n", arg->id);
       pthread_mutex_unlock(&arg->my_mutex);
-      return (1);
     }
-  doSleep(arg);
-  return (0);
+  else
+    doSleep(arg);
 }
 
 void		getPriority(t_philo *arg)
@@ -110,18 +100,18 @@ void		*doSomeThing(void *arg)
     {
       tmp = (t_philo*)arg;
       if (tmp->priority == true)
-	getPriority(tmp);
+	getPriority(arg);
       switch (tmp->act)
 	{
-	case NOTHING: doEat(tmp);
+	case NOTHING: doEat(arg);
 	  break;
-	case EAT: doSleep(tmp);
+	case EAT: doSleep(arg);
 	  break;
-	case SLEEP: doEat(tmp);
+	case SLEEP: doEat(arg);
 	  break;
-	case THINK: doEat(tmp);
+	case THINK: doEat(arg);
 	  break;
 	}
     }
-  return (tmp);
+  return (arg);
 }

@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 22:50:45 2015 denel-_l
-** Last update Fri Feb 27 15:09:56 2015 denel-_l
+** Last update Fri Feb 27 15:31:35 2015 denel-_l
 */
 
 #include "Action.h"
@@ -15,15 +15,8 @@ int		main(void)
 {
   t_philo	*philo;
   t_philo	*tmp;
-  int		i;
 
-  i = 1;
   philo = init();
-  while (i < 7)
-    {
-      pushafter(philo, i + 1);
-      i++;
-    }
   tmp = philo->next;
   if (pthread_create(&philo->my_thread, NULL, doSomeThing, (void*)philo) != 0)
     return (0);
@@ -50,9 +43,10 @@ int		main(void)
 t_philo		*init(void)
 {
   t_philo	*philo;
+  int		i;
 
-  philo = (t_philo*)malloc(sizeof(*philo));
-  if (philo != NULL)
+  i = 1;
+  if ((philo = (t_philo*)malloc(sizeof(*philo))) != NULL)
     {
       philo->id = 1;
       philo->act = NOTHING;
@@ -66,6 +60,11 @@ t_philo		*init(void)
     {
       printf("Malloc Fail !\n");
       return (NULL);
+    }
+  while (i < 7)
+    {
+      pushafter(philo, i + 1);
+      i++;
     }
   return (philo);
 }
