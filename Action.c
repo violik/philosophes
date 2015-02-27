@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:31 2015 denel-_l
-** Last update Wed Feb 25 11:46:00 2015 denel-_l
+** Last update Fri Feb 27 14:38:18 2015 denel-_l
 */
 
 #include "Action.h"
@@ -31,12 +31,12 @@ int		doEat(t_philo *arg)
   if (arg->left_av == true && arg->next->left_av == true) {
     pthread_mutex_lock(&arg->my_mutex);
     arg->act = EAT;
+    reserve -= 1;
     arg->left_av = false;
     arg->next->left_av = false;
     printf("The philosopher n°%d, is eating\n", arg->id);
     sleep(T_SLEEP);
-    printf("The philosopher n°%d, has finished heating\n", arg->id);
-    reserve -= 1;
+    printf("The philosopher n°%d, has finished eating\n", arg->id);
     printf("It remains %d bowls\n", reserve);
     arg->left_av = true;
     arg->next->left_av = true;
@@ -46,7 +46,7 @@ int		doEat(t_philo *arg)
   }
   doThink(arg);
   sleep (2);
-  printf("The philosopher n°%d is waiting for chopsticks, he gonna try to find one\n", arg->id);
+  /* printf("The philosopher n°%d is waiting for chopsticks, he gonna try to find one\n", arg->id); */
   return (0);
 }
 
@@ -75,21 +75,21 @@ int		doThink(t_philo *arg)
     return (1);
   }
   doSleep(arg);
-  printf("The philosopher n°%d fell asleep, he can't think\n", arg->id);
+  /* printf("The philosopher n°%d fell asleep, he can't think\n", arg->id); */
   return (0);
 }
 
 void		getPriority(t_philo *arg)
 {
   if (arg->left_av != true && arg->prev->act == THINK) {
+    pthread_mutex_unlock(&arg->prev->my_mutex);
     arg->prev->act = EAT;
     arg->left_av = true;
-    pthread_mutex_unlock(&arg->prev->my_mutex);
   }
   if (arg->next->left_av != true && arg->next->act == THINK) {
+    pthread_mutex_unlock(&arg->prev->my_mutex);
     arg->next->act = EAT;
     arg->next->left_av = true;
-    pthread_mutex_lock(&arg->next->my_mutex);
   }
 }
 
