@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:37 2015 denel-_l
-** Last update Fri Feb 27 15:44:33 2015 denel-_l
+** Last update Sun Mar  1 21:11:10 2015 Glubzite
 */
 
 #ifndef ACTION_H_
@@ -21,7 +21,7 @@
 # define T_SLEEP 3
 # define T_THINK 2
 
-static int		reserve = 20;
+static int		g_reserve = 20;
 
 typedef enum		e_Action
   {
@@ -45,7 +45,6 @@ enum
     false
   };
 
-
 typedef struct		s_philo
 {
   int			id;
@@ -59,7 +58,6 @@ typedef struct		s_philo
   struct s_philo	*prev;
 }			t_philo;
 
-
 t_philo		*init(void);
 void		pushafter(t_philo *element, int i);
 void		emptyliste(t_philo *list);
@@ -69,9 +67,5 @@ void		doThink(t_philo *arg);
 void		doEat(t_philo *arg);
 void		*doSomeThing(void *arg);
 void		getPriority(t_philo *arg);
-
-
-
-
 
 #endif /* !ACTION_H_ */

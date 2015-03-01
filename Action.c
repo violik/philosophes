@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:31 2015 denel-_l
-** Last update Sun Mar  1 17:10:06 2015 Glubzite
+** Last update Sun Mar  1 21:07:34 2015 Glubzite
 */
 
 #include "Action.h"
@@ -21,7 +21,6 @@ void		doSleep(t_philo *arg)
       printf("The philosophe n°%d wakes up with priority\n", arg->id);
     }
 }
-
 
 void		doEat(t_philo *arg)
 {
