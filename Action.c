@@ -5,7 +5,7 @@
 ** Login   <denel-_l@epitech.net>
 **
 ** Started on  Tue Feb 24 16:12:31 2015 denel-_l
-** Last update Sun Mar  1 17:04:03 2015 Glubzite
+** Last update Sun Mar  1 17:10:06 2015 Glubzite
 */
 
 #include "Action.h"
@@ -101,25 +101,14 @@ void		*doSomeThing(void *arg)
       tmp = (t_philo*)arg;
       if (tmp->priority == true)
 	getPriority(arg);
-      /* if (tmp->act) */
-      /* 	{ */
-	  if (tmp->act == NOTHING)
-	    doEat(arg);
-	  /* case NOTHING: doEat(arg); */
-	  /*   break; */
-	  else if (tmp->act == EAT)
-	    doSleep(arg);
-	  /* case EAT: doSleep(arg); */
-	  /*   break; */
-	  else if (tmp->act == SLEEP)
-	    doEat(arg);
-	  /* case SLEEP: doEat(arg); */
-	  /*   break; */
-	  else if (tmp->act == THINK)
-	    doEat(arg);
-	  /* case THINK: doEat(arg); */
-	  /*   break; */
-	/* } */
+      if (tmp->act == NOTHING)
+	doEat(arg);
+      else if (tmp->act == EAT)
+	doSleep(arg);
+      else if (tmp->act == SLEEP)
+	doEat(arg);
+      else if (tmp->act == THINK)
+	doEat(arg);
     }
   return (arg);
 }
